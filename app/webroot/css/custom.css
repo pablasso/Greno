@@ -1,0 +1,23 @@
+fieldset {
+	border: 1px solid #ccc;
+	margin: 10px;
+	padding: 10px;
+}
+.silo_online {
+	width: 200px;
+	padding:10px;
+	border: 1px solid #9bac55;
+	background:#e5f993;	
+	font-size: 12px;
+	color: #688006;
+	line-height:normal;
+}
+.silo_offline {
+	width: 200px;
+	padding:10px;
+	border: 1px solid #e18484;
+	background:#f6b9b9;	
+	font-size: 12px;
+	color: #c32727;
+	line-height:normal;
+}
