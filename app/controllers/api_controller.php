@@ -110,17 +110,17 @@ class ApiController extends AppController
 	 **/
 	function float_debug()
 	{
-		$results = $this->Float->findAll(null, null, "time DESC");
+		$results = $this->Float->findAll(null, null, "time ASC");
 		
 		foreach ($results as $result) {
 			echo date("D M j G:i:s Y",  $result['Float']['time']);
-			echo " | ";
+			echo "|";
 			echo $result['Float']['tagname'];
-			echo ":";
+			echo "|";
 			echo $result['Float']['value'];
-			echo ",";
+			echo "|";
 			echo $result['Float']['time'];
-			echo "<br />";
+			echo "\n";
 		}
 	}
 	
@@ -130,17 +130,17 @@ class ApiController extends AppController
 	 **/
 	function bool_debug()
 	{
-		$results = $this->Bool->findAll(null, null, "time DESC");
+		$results = $this->Bool->findAll(null, null, "time ASC");
 		
 		foreach ($results as $result) {
 			echo date("D M j G:i:s Y",  $result['Bool']['time']);
-			echo " | ";
+			echo "|";
 			echo $result['Bool']['tagname'];
-			echo ":";
+			echo "|";
 			echo $result['Bool']['value'];
-			echo ",";
+			echo "|";
 			echo $result['Bool']['time'];
-			echo "<br />";
+			echo "\n";
 		}
 	}
 }
