@@ -15,6 +15,7 @@ class UsersController extends AppController {
 		
 		if ( isset($this->data) )
 		{
+			// silly placeholder, the final version will use Cake's ACLs
 			if (($this->data["User"]["username"] == "admin" && $this->data["User"]["password"] == "admin") || 
 				($this->data["User"]["username"] == "user" && $this->data["User"]["password"] == "user")) 
 			{
