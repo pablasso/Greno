@@ -132,3 +132,13 @@ CREATE TABLE `bools` (
   `time` int(10) unsigned default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `temperatures` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `silo_id` int(10) unsigned default NULL,
+  `column` int(10) NOT NULL,
+  `total` int(10) NOT NULL,
+  `time` int(10) unsigned default NULL,
+  `temperatures` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

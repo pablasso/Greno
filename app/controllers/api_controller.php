@@ -3,7 +3,7 @@
 class ApiController extends AppController
 {
 	var $name = "Api";
-	var $uses = array('Float', 'Bool', 'Configuration', 'ApiRequest');
+	var $uses = array('Float', 'Bool', 'Temperature', 'Configuration', 'ApiRequest');
 	var $layout = "ajax";
 	
 	/**
@@ -20,12 +20,12 @@ class ApiController extends AppController
 	 * Adds a single 'float' registry via POST
 	 * 
 	 * ToDo: should add several registries at once
-	 * ToDo: die() is fugly, throw exceptions!
 	 * 
 	 * @param string $_POST['tagname']
-	 * @param string $_POST['value']
-	 * @param string $_POST['time']
+	 * @param float $_POST['value']
+	 * @param int $_POST['time']
 	 * @param string $_POST['api_key']
+	 * @return void
 	 */
 	function float_add() {
 		if (isset($_POST['tagname']) && isset($_POST['value']) 
@@ -35,7 +35,9 @@ class ApiController extends AppController
 				die('error: incorrect api key');
 			}
 			
-			$this->ApiRequest->save(array("method" => "float_add", "silo_id" => array_search($_POST['api_key'], $this->api_keys), "api_key" => $api_key));
+			$this->ApiRequest->save(array("method" => "float_add", 
+										  "silo_id" => array_search($_POST['api_key'], $this->api_keys), 
+										  "api_key" => $_POST['api_key']));
 			
 			$_POST['silo_id'] = array_search($_POST['api_key'], $this->api_keys);
 			$this->Float->create();
@@ -54,12 +56,12 @@ class ApiController extends AppController
 	 * Adds a single 'bool' registry via POST
 	 * 
 	 * ToDo: should add several registries at once
-	 * ToDo: die() is fugly, throw exceptions!
 	 * 
 	 * @param string $_POST['tagname']
-	 * @param string $_POST['value']
-	 * @param string $_POST['time']
+	 * @param int $_POST['value']
+	 * @param int $_POST['time']
 	 * @param string $_POST['api_key']
+	 * @return void
 	 */
 	function bool_add() {
 		if (isset($_POST['tagname']) && isset($_POST['value']) 
@@ -69,7 +71,9 @@ class ApiController extends AppController
 				die('error: incorrect api key');
 			}
 
-			$this->ApiRequest->save(array("method" => "bool_add", "silo_id" => array_search($_POST['api_key'], $this->api_keys), "api_key" => $api_key));
+			$this->ApiRequest->save(array("method" => "bool_add", 
+										  "silo_id" => array_search($_POST['api_key'], $this->api_keys), 
+										  "api_key" => $_POST['api_key']));
 
 			$_POST['silo_id'] = array_search($_POST['api_key'], $this->api_keys);			
 			$this->Bool->create();
@@ -90,8 +94,10 @@ class ApiController extends AppController
 	 **/
 	function config_get($api_key)
 	{
+		header("Context-type: text/plain");
+		
 		if (empty($api_key)) {
-			die("error: correct usage is {domain}/config_get/{api_key}");
+			die("error: correct usage is {domain}/api/config_get/{api_key}");
 		}
 		
 		$silo_id = array_search($api_key, $this->api_keys);		
@@ -142,6 +148,66 @@ class ApiController extends AppController
 			echo $result['Bool']['value'];
 			echo "|";
 			echo $result['Bool']['time'];
+			echo "\n";
+		}
+	}
+	
+	/**
+	 * Creates a record for a single temperature column
+	 *
+	 * @param int $_POST['column']
+	 * @param int $_POST['total']
+	 * @param int $_POST['time']
+	 * @param string $_POST['temperatures']
+	 * @param string $_POST['api_key']
+	 * @return void
+	 **/
+	function temperature_add()
+	{
+		if (isset($_POST['column']) && isset($_POST['total']) && 
+			isset($_POST['time']) && isset($_POST['temperatures']) && 
+			isset($_POST['api_key']) 
+		) {
+			if (!in_array($_POST['api_key'], $this->api_keys)) {
+				die('error: incorrect api key');
+			}
+			
+			$this->ApiRequest->save(array("method" => "temp_add", 
+										  "silo_id" => array_search($_POST['api_key'], $this->api_keys), 
+										  "api_key" => $_POST['api_key']));
+			
+			$_POST['silo_id'] = array_search($_POST['api_key'], $this->api_keys);
+			$this->Temperature->create();
+			if (!$this->Temperature->save($_POST)) {
+				die('error: saving to the database');
+			}
+			
+			echo "success";
+		}
+		else {
+			die('error: incorrect parameters');
+		}
+	}
+
+	/**
+	 * this functions is just for testing, must be removed on production
+	 * returns all the temperatures values
+	 **/
+	function temperature_debug()
+	{
+		$results = $this->Temperature->findAll(null, null, "time ASC");
+		header("Content-type: text/plain");
+		
+		foreach ($results as $result) {
+			echo date("D M j G:i:s Y",  $result['Temperature']['time']);
+			echo "|";
+			echo $result['Temperature']['column'];
+			echo "|";
+			echo $result['Temperature']['total'];
+			echo "|";
+			echo $result['Temperature']['time'];
+			echo "|";
+			echo $result['Temperature']['temperatures'];
 			echo "\n";
 		}
 	}
