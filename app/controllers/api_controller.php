@@ -111,6 +111,7 @@ class ApiController extends AppController
 	function float_debug()
 	{
 		$results = $this->Float->findAll(null, null, "time ASC");
+		header("Content-type: text/plain");
 		
 		foreach ($results as $result) {
 			echo date("D M j G:i:s Y",  $result['Float']['time']);
@@ -131,6 +132,7 @@ class ApiController extends AppController
 	function bool_debug()
 	{
 		$results = $this->Bool->findAll(null, null, "time ASC");
+		header("Content-type: text/plain");
 		
 		foreach ($results as $result) {
 			echo date("D M j G:i:s Y",  $result['Bool']['time']);
