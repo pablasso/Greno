@@ -92,16 +92,16 @@ class ApiController extends AppController
 	 * Returns all configuration parameters for the given silo 
 	 *
 	 **/
-	function config_get($api_key)
+	function config_get()
 	{
 		header("Context-type: text/plain");
 		
-		if (empty($api_key)) {
-			die("error: correct usage is {domain}/api/config_get/{api_key}");
+		if (empty($_POST['api_key'])) {
+			die("error: api_key not set");
 		}
 		
-		$silo_id = array_search($api_key, $this->api_keys);		
-		$this->ApiRequest->save(array("method" => "config_get", "silo_id" => $silo_id, "api_key" => $api_key));
+		$silo_id = array_search($_POST['api_key'], $this->api_keys);		
+		$this->ApiRequest->save(array("method" => "config_get", "silo_id" => $silo_id, "api_key" => $_POST['api_key']));
 		$fields = array("fan_auto", "humidity_min", "humidity_max", "fan_service_min", "fan_service_max");
 		$this->data = $this->Configuration->find(array("silo_id" => $silo_id), $fields);
 		
