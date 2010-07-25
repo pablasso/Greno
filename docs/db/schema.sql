@@ -1,5 +1,18 @@
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `group_id` int(11) unsigned NOT NULL default 0,
+  `created` datetime default NULL,
+  `modified` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `groups` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `created` datetime default NULL,
+  `modified` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
